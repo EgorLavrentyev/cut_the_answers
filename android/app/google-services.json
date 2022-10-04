@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "797910303702",
+    "project_id": "jobjobgame-470a1",
+    "storage_bucket": "jobjobgame-470a1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:797910303702:android:bd5956275e0afc595f5a77",
+        "android_client_info": {
+          "package_name": "com.example.job_job_game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "797910303702-h6n7sbnl8omb1todk864c3n9f1kb1d3d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzXoP7OKQmAD4tMawUuRIFCkTXXL1uLcA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "797910303702-h6n7sbnl8omb1todk864c3n9f1kb1d3d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "797910303702-hh3iv11iqgm859na7f9rgjihlf8up8bl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sgooll.jobJobGame"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
