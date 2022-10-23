@@ -1,3 +1,1 @@
-# job_job_game
-
-mobile version of job job game
+# cut_the_answers
