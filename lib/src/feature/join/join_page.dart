@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:job_job_game/src/config/colors.dart';
 import 'package:job_job_game/src/config/theme.dart';
 
+import '../lobby/lobby_page.dart';
 import '../widgets/button.dart';
 
 class JoinPage extends StatelessWidget {
@@ -38,6 +39,8 @@ class JoinPage extends StatelessWidget {
           ),
           Button(
               onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => LobbyPage(roomId: controller.text)));
               },
               child: Text(
             "Присоединиться",
