@@ -1,12 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:job_job_game/src/config/colors.dart';
 import 'package:job_job_game/src/config/theme.dart';
 
+import '../../core/func/join_func.dart';
 import '../lobby/lobby_page.dart';
 import '../widgets/button.dart';
 
 class JoinPage extends StatelessWidget {
-  JoinPage({Key? key}) : super(key: key);
+  JoinPage({Key? key, required this.nickname}) : super(key: key);
+  final String nickname;
   final TextEditingController controller = TextEditingController();
 
   @override
@@ -38,14 +41,27 @@ class JoinPage extends StatelessWidget {
             ),
           ),
           Button(
-              onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => LobbyPage(roomId: controller.text)));
+              onPressed: () async {
+                final data = await JoinFunc.connectToSession(
+                    context, controller, nickname);
+                if (data) {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              LobbyPage(roomId: controller.text)));
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                    "Неверный код комнаты!",
+                    style: AppTextTheme.button,
+                  )));
+                }
               },
               child: Text(
-            "Присоединиться",
-            style: AppTextTheme.button,
-          ))
+                "Присоединиться",
+                style: AppTextTheme.button,
+              ))
         ],
       ),
     );

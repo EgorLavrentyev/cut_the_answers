@@ -1,12 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:job_job_game/src/config/colors.dart';
+import 'package:job_job_game/src/core/classes/game.dart';
 
 import '../../config/theme.dart';
+import '../../core/classes/app.dart';
+import '../../core/models/player.dart';
 import '../widgets/button.dart';
 
-class LobbyPage extends StatelessWidget {
+class LobbyPage extends StatefulWidget {
   const LobbyPage({Key? key, required this.roomId}) : super(key: key);
   final String roomId;
+
+  @override
+  State<LobbyPage> createState() => _LobbyPageState();
+}
+
+class _LobbyPageState extends State<LobbyPage> {
+  @override
+  void initState() {
+    App.database
+        .collection('game')
+        .doc(widget.roomId)
+        .snapshots()
+        .listen((event) {
+      Game.players.clear();
+      for (var map in event.data()!["players"]) {
+        Game.players.add(Player.fromMap(map));
+      }
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +49,7 @@ class LobbyPage extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           Text(
-            roomId,
+            widget.roomId,
             style: AppTextTheme.headline.copyWith(color: AppColors.brown),
             textAlign: TextAlign.center,
           ),
@@ -30,7 +59,7 @@ class LobbyPage extends StatelessWidget {
             child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     mainAxisExtent: 90, maxCrossAxisExtent: 200),
-                itemCount: 10,
+                itemCount: Game.players.length,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return RichText(
@@ -43,7 +72,7 @@ class LobbyPage extends StatelessWidget {
                                 text: "${index + 1}. ",
                                 style: const TextStyle(color: Colors.black)),
                             TextSpan(
-                                text: "Никнейм тут ",
+                                text: Game.players[index].nickname,
                                 style: const TextStyle(color: Colors.brown))
                           ]));
                 }),
