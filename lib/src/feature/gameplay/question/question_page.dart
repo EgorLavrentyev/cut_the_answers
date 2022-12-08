@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:job_job_game/src/core/classes/game.dart';
 import 'package:job_job_game/src/feature/gameplay/question/widgets/question_widget.dart';
 
 class QuestionPage extends StatefulWidget {
@@ -30,7 +31,9 @@ class _QuestionPageState extends State<QuestionPage> {
               },
               itemBuilder: (context, index) {
                 return QuestionWidget(
-                    pageController: pageController, currentPage: currentPage);
+                    pageController: pageController,
+                    currentPage: currentPage,
+                    question: Game.questions[index].keys.first);
               }),
         ),
       ),

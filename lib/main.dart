@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: AppTheme.theme,
-        home: QuestionPage() //MainMenuPage(),
+        home: MainMenuPage() //MainMenuPage(),
         );
   }
 }

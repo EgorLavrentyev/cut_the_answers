@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:job_job_game/src/core/classes/game.dart';
 import 'package:job_job_game/src/core/models/player.dart';
+import 'package:job_job_game/src/feature/gameplay/question/question_page.dart';
 
 import '../../feature/join/join_page.dart';
 import '../../feature/lobby/lobby_page.dart';
@@ -26,6 +27,7 @@ class JoinFunc {
 
   static createSession(context, String nickname) async {
     String roomId = getRandomString(4);
+    Game.myNickname = nickname;
     App.database.collection('game').doc(roomId).set({
       "roomId": roomId,
       "players": [
@@ -33,7 +35,8 @@ class JoinFunc {
           "nickname": nickname,
           "score": 0,
         }
-      ]
+      ],
+      "questions": [],
     });
     final snapshot = await App.database.collection('game').doc(roomId).get();
     print(snapshot.data()!["players"]);
@@ -43,6 +46,7 @@ class JoinFunc {
 
   static connectToSession(BuildContext context,
       TextEditingController textEditingController, String nickname) async {
+    Game.myNickname = nickname;
     String roomId = textEditingController.text;
     final doc = App.database.collection('game').doc(roomId);
 
@@ -61,7 +65,8 @@ class JoinFunc {
             "nickname": nickname,
             "score": 0,
           }
-        ]
+        ],
+        "questions": [],
       });
 
       return true;

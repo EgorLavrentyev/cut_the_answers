@@ -1,10 +1,15 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:job_job_game/src/config/colors.dart';
 import 'package:job_job_game/src/core/classes/game.dart';
+import 'package:job_job_game/src/core/services/ui.dart';
+import 'package:job_job_game/src/data/questions/questions.dart';
 
 import '../../config/theme.dart';
 import '../../core/classes/app.dart';
 import '../../core/models/player.dart';
+import '../gameplay/question/question_page.dart';
 import '../widgets/button.dart';
 
 class LobbyPage extends StatefulWidget {
@@ -16,18 +21,44 @@ class LobbyPage extends StatefulWidget {
 }
 
 class _LobbyPageState extends State<LobbyPage> {
+  late var listen;
+
   @override
   void initState() {
-    App.database
+    listen = App.database
         .collection('game')
         .doc(widget.roomId)
         .snapshots()
-        .listen((event) {
+        .listen((event) async {
       Game.players.clear();
       for (var map in event.data()!["players"]) {
         Game.players.add(Player.fromMap(map));
       }
       setState(() {});
+      if (event.data()!["start"] == true) {
+        Random rand = Random();
+
+        List<String> temp = Questions.questions.toList();
+
+        temp.shuffle();
+
+        List<Map<String, dynamic>> myQuestions = [];
+        for (int i = 0; i < 3; i++) {
+          myQuestions.add({temp[i]: ""});
+        }
+        final doc = App.database.collection('game').doc(widget.roomId);
+        Game.questions.addAll(myQuestions);
+        doc.update({
+          "questions": [
+            {Game.myNickname: Game.questions},
+            ...event.data()!["questions"],
+          ]
+        });
+        print(Game.questions);
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => QuestionPage()));
+        listen.cancel();
+      }
     });
     super.initState();
   }
@@ -78,7 +109,21 @@ class _LobbyPageState extends State<LobbyPage> {
                 }),
           ),
           Button(
-              onPressed: () {},
+              onPressed: () async {
+                if (Game.players.length >= 2) {
+                  final doc =
+                      App.database.collection('game').doc(widget.roomId);
+                  final snapshot = await doc.get();
+                  doc.set({
+                    "roomId": widget.roomId,
+                    "players": snapshot.data()!["players"],
+                    "start": true,
+                    "questions": [],
+                  });
+                } else {
+                  Ui.showSnack(context, "Играть одному не интересно!");
+                }
+              },
               child: Text(
                 "Начать",
                 style: AppTextTheme.button,

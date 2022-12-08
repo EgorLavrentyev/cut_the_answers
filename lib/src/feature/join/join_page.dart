@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:job_job_game/src/config/colors.dart';
 import 'package:job_job_game/src/config/theme.dart';
+import 'package:job_job_game/src/core/services/ui.dart';
 
 import '../../core/func/join_func.dart';
 import '../lobby/lobby_page.dart';
@@ -51,11 +52,7 @@ class JoinPage extends StatelessWidget {
                           builder: (context) =>
                               LobbyPage(roomId: controller.text)));
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                    "Неверный код комнаты!",
-                    style: AppTextTheme.button,
-                  )));
+                  Ui.showSnack(context, "Неверный код комнаты!");
                 }
               },
               child: Text(

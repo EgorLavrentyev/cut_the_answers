@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:job_job_game/src/config/theme.dart';
+import 'package:job_job_game/src/core/classes/game.dart';
 import 'package:job_job_game/src/core/func/gameplay_func.dart';
 import 'package:job_job_game/src/feature/widgets/button.dart';
 
@@ -7,20 +8,25 @@ import '../../../../config/colors.dart';
 
 class QuestionWidget extends StatelessWidget {
   QuestionWidget(
-      {Key? key, required this.pageController, required this.currentPage})
+      {Key? key,
+      required this.pageController,
+      required this.currentPage,
+      required this.question})
       : super(key: key);
 
   final TextEditingController controller = TextEditingController();
   final PageController pageController;
   final int currentPage;
+  final String question;
 
   @override
   Widget build(BuildContext context) {
+    print(Game.questions);
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          "В каком деле вы лучше всех?",
+          question,
           textAlign: TextAlign.center,
           style: AppTextTheme.headline,
         ),
@@ -28,7 +34,7 @@ class QuestionWidget extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           children: [
             SizedBox(
-              height: 500,
+              height: MediaQuery.of(context).size.height / 2,
               //width: 400,
               child: TextField(
                 textAlignVertical: TextAlignVertical.top,
