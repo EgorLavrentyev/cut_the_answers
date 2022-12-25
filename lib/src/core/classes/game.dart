@@ -4,4 +4,5 @@ class Game {
   static List<Player> players = [];
   static List<Map<String, dynamic>> questions = [];
   static String myNickname = '';
+  static String roomId = '';
 }

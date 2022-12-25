@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:job_job_game/src/config/theme.dart';
 import 'package:job_job_game/src/core/classes/app.dart';
 import 'package:job_job_game/src/core/func/join_func.dart';
+import 'package:job_job_game/src/data/questions/questions.dart';
 import 'package:job_job_game/src/feature/join/join_page.dart';
 
 import '../../config/colors.dart';

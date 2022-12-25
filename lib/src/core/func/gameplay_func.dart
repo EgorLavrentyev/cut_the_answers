@@ -21,7 +21,7 @@ List<String> marks = [
 ];
 
 class GameplayFunc {
-  static separateAnswer(String answer) {
+  static List<String> separateAnswer(String answer) {
     List<String> words = answer.split(" ");
     print(words);
     return words;

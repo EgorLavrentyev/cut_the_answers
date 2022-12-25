@@ -30,13 +30,13 @@ class _LobbyPageState extends State<LobbyPage> {
         .doc(widget.roomId)
         .snapshots()
         .listen((event) async {
+          Game.roomId = widget.roomId;
       Game.players.clear();
       for (var map in event.data()!["players"]) {
         Game.players.add(Player.fromMap(map));
       }
       setState(() {});
       if (event.data()!["start"] == true) {
-        Random rand = Random();
 
         List<String> temp = Questions.questions.toList();
 
@@ -46,15 +46,13 @@ class _LobbyPageState extends State<LobbyPage> {
         for (int i = 0; i < 3; i++) {
           myQuestions.add({temp[i]: ""});
         }
-        final doc = App.database.collection('game').doc(widget.roomId);
         Game.questions.addAll(myQuestions);
-        doc.update({
-          "questions": [
-            {Game.myNickname: Game.questions},
-            ...event.data()!["questions"],
-          ]
-        });
-        print(Game.questions);
+        // doc.update({
+        //   "questions": [
+        //     {Game.myNickname: Game.questions},
+        //     ...event.data()!["questions"],
+        //   ]
+        // });
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => QuestionPage()));
         listen.cancel();
@@ -119,6 +117,7 @@ class _LobbyPageState extends State<LobbyPage> {
                     "players": snapshot.data()!["players"],
                     "start": true,
                     "questions": [],
+                    "answerWords": [],
                   });
                 } else {
                   Ui.showSnack(context, "Играть одному не интересно!");

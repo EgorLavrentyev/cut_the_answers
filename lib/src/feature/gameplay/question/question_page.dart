@@ -5,6 +5,8 @@ import 'package:job_job_game/src/feature/gameplay/question/widgets/question_widg
 class QuestionPage extends StatefulWidget {
   QuestionPage({Key? key}) : super(key: key);
 
+
+
   @override
   State<QuestionPage> createState() => _QuestionPageState();
 }
