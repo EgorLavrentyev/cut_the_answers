@@ -93,7 +93,11 @@ class QuestionWidget extends StatelessWidget {
                   {
                    var me = Game.players.firstWhere((element) => element.nickname == Game.myNickname);
                    me.isReady = true;
-                   doc.update({"players": Game.players});
+                   var temp = [];
+                   for (var player in Game.players) {
+                     temp.add(player.toMap());
+                   }
+                   doc.update({"players": temp});
                   }
               },
               child: Text(
