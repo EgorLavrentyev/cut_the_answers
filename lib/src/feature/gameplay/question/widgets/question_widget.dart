@@ -5,6 +5,7 @@ import 'package:job_job_game/src/core/classes/game.dart';
 import 'package:job_job_game/src/core/func/gameplay_func.dart';
 import 'package:job_job_game/src/feature/gameplay/answer/answer_page.dart';
 import 'package:job_job_game/src/feature/widgets/button.dart';
+import 'package:job_job_game/src/feature/widgets/overlay_loading/controller.dart';
 
 import '../../../../config/colors.dart';
 import '../../../../core/classes/app.dart';
@@ -44,6 +45,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
       }
       if (Game.players.every((element) => element.isReady == true)){
         Navigator.push(context, MaterialPageRoute(builder: (context) => AnswerPage()));
+        OverlayLoadingController.remove(context);
         listen.cancel();
       }
     });
@@ -130,6 +132,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                      temp.add(player.toMap());
                    }
                    doc.update({"players": temp});
+                   OverlayLoadingController.show(context);
                   }
               },
               child: Text(

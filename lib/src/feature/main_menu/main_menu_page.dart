@@ -9,6 +9,7 @@ import 'package:job_job_game/src/feature/join/join_page.dart';
 import '../../config/colors.dart';
 import '../lobby/lobby_page.dart';
 import '../widgets/button.dart';
+import '../widgets/overlay_loading/controller.dart';
 
 class MainMenuPage extends StatefulWidget {
   MainMenuPage({Key? key}) : super(key: key);
@@ -73,7 +74,8 @@ class _MainMenuPageState extends State<MainMenuPage> {
               child: Button(
                   onPressed: JoinFunc.nicknameValidation(textEditingController)
                       ? () {
-                          Navigator.push(
+
+                    Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => JoinPage(
