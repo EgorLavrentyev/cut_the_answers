@@ -78,13 +78,22 @@ class QuestionWidget extends StatelessWidget {
 
           Button(
               onPressed: () {
-                var words = GameplayFunc.separateAnswer(controller.text);
+                var words = GameplayFunc.separateAnswer(controller.text.trim());
                 words.shuffle();
                 App.database
                     .collection('game')
-                    .doc(Game.roomId).update({"answerWords": FieldValue.arrayUnion([words])});
-                pageController.nextPage(
-                    duration: Duration(milliseconds: 500), curve: Curves.linear);
+                    .doc(Game.roomId).update({"answerWords": FieldValue.arrayUnion(words)});
+                if(currentPage != 2)
+                  {
+                    pageController.nextPage(
+                        duration: Duration(milliseconds: 500), curve: Curves.linear);
+                  }
+                else if (currentPage == 2)
+                  {
+                   var me = Game.players.firstWhere((element) => element.nickname == Game.myNickname);
+                   me.isReady = true;
+                   print(Game.players.toString());
+                  }
               },
               child: Text(
                 "Продолжить",
