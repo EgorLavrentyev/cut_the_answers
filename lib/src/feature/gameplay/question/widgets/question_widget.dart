@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:job_job_game/src/config/theme.dart';
 import 'package:job_job_game/src/core/classes/game.dart';
 import 'package:job_job_game/src/core/func/gameplay_func.dart';
+import 'package:job_job_game/src/feature/gameplay/answer/answer_page.dart';
 import 'package:job_job_game/src/feature/widgets/button.dart';
 
 import '../../../../config/colors.dart';
 import '../../../../core/classes/app.dart';
+import '../../../../core/models/player.dart';
 
 class QuestionWidget extends StatelessWidget {
   QuestionWidget(
@@ -79,8 +81,20 @@ class QuestionWidget extends StatelessWidget {
           Button(
               onPressed: () {
                 var doc = App.database
-                    .collection('game')
-                    .doc(Game.roomId);
+                  .collection('game')
+                  .doc(Game.roomId);
+                var listen = doc
+                    .snapshots()
+                    .listen((event) async {
+                      Game.players.clear();
+                      for (var map in event.data()!["players"]) {
+                        Game.players.add(Player.fromMap(map));
+                      }
+                      if (Game.players.every((element) => element.isReady == true)){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => AnswerPage()));
+                      }
+                });
+
                 var words = GameplayFunc.separateAnswer(controller.text.trim());
                 words.shuffle();
                 doc.update({"answerWords": FieldValue.arrayUnion(words)});
@@ -91,6 +105,7 @@ class QuestionWidget extends StatelessWidget {
                   }
                 else if (currentPage == 2)
                   {
+
                    var me = Game.players.firstWhere((element) => element.nickname == Game.myNickname);
                    me.isReady = true;
                    var temp = [];
