@@ -78,11 +78,12 @@ class QuestionWidget extends StatelessWidget {
 
           Button(
               onPressed: () {
+                var doc = App.database
+                    .collection('game')
+                    .doc(Game.roomId);
                 var words = GameplayFunc.separateAnswer(controller.text.trim());
                 words.shuffle();
-                App.database
-                    .collection('game')
-                    .doc(Game.roomId).update({"answerWords": FieldValue.arrayUnion(words)});
+                doc.update({"answerWords": FieldValue.arrayUnion(words)});
                 if(currentPage != 2)
                   {
                     pageController.nextPage(
@@ -92,7 +93,7 @@ class QuestionWidget extends StatelessWidget {
                   {
                    var me = Game.players.firstWhere((element) => element.nickname == Game.myNickname);
                    me.isReady = true;
-                   print(Game.players.toString());
+                   doc.update({"players": Game.players});
                   }
               },
               child: Text(
