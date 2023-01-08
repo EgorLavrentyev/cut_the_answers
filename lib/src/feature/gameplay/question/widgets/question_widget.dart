@@ -10,7 +10,7 @@ import '../../../../config/colors.dart';
 import '../../../../core/classes/app.dart';
 import '../../../../core/models/player.dart';
 
-class QuestionWidget extends StatelessWidget {
+class QuestionWidget extends StatefulWidget {
   QuestionWidget(
       {Key? key,
       required this.pageController,
@@ -18,10 +18,37 @@ class QuestionWidget extends StatelessWidget {
       required this.question})
       : super(key: key);
 
-  final TextEditingController controller = TextEditingController();
   final PageController pageController;
   final int currentPage;
   final String question;
+
+  @override
+  State<QuestionWidget> createState() => _QuestionWidgetState();
+}
+
+class _QuestionWidgetState extends State<QuestionWidget> {
+  final TextEditingController controller = TextEditingController();
+
+  late var listen;
+  @override
+  void initState() {
+    var doc = App.database
+        .collection('game')
+        .doc(Game.roomId);
+    listen = doc
+        .snapshots()
+        .listen((event) async {
+      Game.players.clear();
+      for (var map in event.data()!["players"]) {
+        Game.players.add(Player.fromMap(map));
+      }
+      if (Game.players.every((element) => element.isReady == true)){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => AnswerPage()));
+        listen.cancel();
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +57,7 @@ class QuestionWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            question,
+            widget.question,
             textAlign: TextAlign.center,
             style: AppTextTheme.headline.copyWith(fontSize: 20),
           ),
@@ -70,7 +97,7 @@ class QuestionWidget extends StatelessWidget {
                         bottomRight: Radius.circular(15))),
                 child: Center(
                     child: Text(
-                  "${currentPage + 1}/3",
+                  "${widget.currentPage + 1}/3",
                   style: AppTextTheme.button,
                 )),
               )
@@ -83,27 +110,17 @@ class QuestionWidget extends StatelessWidget {
                 var doc = App.database
                   .collection('game')
                   .doc(Game.roomId);
-                var listen = doc
-                    .snapshots()
-                    .listen((event) async {
-                      Game.players.clear();
-                      for (var map in event.data()!["players"]) {
-                        Game.players.add(Player.fromMap(map));
-                      }
-                      if (Game.players.every((element) => element.isReady == true)){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => AnswerPage()));
-                      }
-                });
+
 
                 var words = GameplayFunc.separateAnswer(controller.text.trim());
                 words.shuffle();
                 doc.update({"answerWords": FieldValue.arrayUnion(words)});
-                if(currentPage != 2)
+                if(widget.currentPage != 2)
                   {
-                    pageController.nextPage(
+                    widget.pageController.nextPage(
                         duration: Duration(milliseconds: 500), curve: Curves.linear);
                   }
-                else if (currentPage == 2)
+                else if (widget.currentPage == 2)
                   {
 
                    var me = Game.players.firstWhere((element) => element.nickname == Game.myNickname);
