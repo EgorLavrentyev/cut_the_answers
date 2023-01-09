@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:job_job_game/src/feature/gameplay/answer/widgets/answer_widget.dart';
 import 'package:job_job_game/src/feature/gameplay/question/widgets/question_widget.dart';
 
+import '../../../core/classes/game.dart';
+
 class AnswerPage extends StatefulWidget {
-  AnswerPage({Key? key}) : super(key: key);
+  AnswerPage({Key? key, required this.availableWords}) : super(key: key);
+
+  final List<dynamic> availableWords;
 
   @override
   State<AnswerPage> createState() => _AnswerPageState();
@@ -31,7 +35,10 @@ class _AnswerPageState extends State<AnswerPage> {
               },
               itemBuilder: (context, index) {
                 return AnswerWidget(
-                    pageController: pageController, currentPage: currentPage);
+                    pageController: pageController,
+                    currentPage: currentPage,
+                    availableWords: widget.availableWords,
+                    question: Game.questions[index + 3].keys.first);
               }),
         ),
       ),

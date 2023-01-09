@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:job_job_game/src/config/theme.dart';
+import 'package:job_job_game/src/core/classes/game.dart';
 import 'package:job_job_game/src/core/func/gameplay_func.dart';
+import 'package:job_job_game/src/data/questions/questions.dart';
 import 'package:job_job_game/src/feature/widgets/button.dart';
 
 import '../../../../config/colors.dart';
 
 class AnswerWidget extends StatefulWidget {
   AnswerWidget(
-      {Key? key, required this.pageController, required this.currentPage})
+      {Key? key,
+      required this.pageController,
+      required this.currentPage,
+      required this.question,
+      required this.availableWords})
       : super(key: key);
 
   final PageController pageController;
   final int currentPage;
+  final String question;
+  final List<dynamic> availableWords;
 
   @override
   State<AnswerWidget> createState() => _AnswerWidgetState();
@@ -20,7 +28,7 @@ class AnswerWidget extends StatefulWidget {
 class _AnswerWidgetState extends State<AnswerWidget> {
   List<String> answerWords = [];
 
-  List<String> availableWords = ["ONE", "TWO", "THREE"];
+  late List<dynamic> availableWords = widget.availableWords;
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +36,9 @@ class _AnswerWidgetState extends State<AnswerWidget> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          "В каком деле вы лучше всех?",
+          widget.question,
           textAlign: TextAlign.center,
-          style: AppTextTheme.headline,
+          style: AppTextTheme.headline.copyWith(fontSize: 20),
         ),
         DragTarget<String>(
           onWillAccept: (value) => !answerWords.contains(value),

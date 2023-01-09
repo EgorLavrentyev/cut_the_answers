@@ -16,12 +16,17 @@ class OverlayLoadingWidget extends StatefulWidget {
 
 class _OverlayLoadingWidgetState extends State<OverlayLoadingWidget>
     with TickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-      vsync: this, duration: Duration(milliseconds: 300));
+  late final AnimationController _controller =
+      AnimationController(vsync: this, duration: Duration(milliseconds: 300));
   late final Animation<double> _fadeTransition =
       Tween<double>(begin: 0, end: 1).animate(_controller);
 
-
+  @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 
   Timer? timer;
 
@@ -31,18 +36,17 @@ class _OverlayLoadingWidgetState extends State<OverlayLoadingWidget>
   void initState() {
     timer = Timer.periodic(Duration(milliseconds: 800), (timer) async {
       dots = "";
-      setState((){});
+      setState(() {});
       await Future.delayed(Duration(milliseconds: 199));
       dots = ".";
-      setState((){});
+      setState(() {});
       await Future.delayed(Duration(milliseconds: 199));
       dots = "..";
-      setState((){});
+      setState(() {});
       await Future.delayed(Duration(milliseconds: 199));
       dots = "...";
-      setState((){});
+      setState(() {});
       await Future.delayed(Duration(milliseconds: 199));
-
     });
     _controller.forward();
     OverlayLoadingController.controller = _controller;
@@ -61,16 +65,20 @@ class _OverlayLoadingWidgetState extends State<OverlayLoadingWidget>
     return FadeTransition(
       opacity: _fadeTransition,
       child: Container(
-        height: MediaQuery.of(context).size.height,
-        color: Colors.black.withOpacity(0.2),
-        child: Scaffold(
-              body: Center(child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Ожидание\nигроков${dots}",  style: AppTextTheme.headline,),
-                ],
-              )),
+          height: MediaQuery.of(context).size.height,
+          color: Colors.black.withOpacity(0.2),
+          child: Scaffold(
+            body: Center(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Ожидание\nигроков${dots}",
+                  style: AppTextTheme.headline,
+                ),
+              ],
             )),
-      );
+          )),
+    );
   }
 }

@@ -10,6 +10,7 @@ import 'package:job_job_game/src/feature/widgets/overlay_loading/controller.dart
 import '../../../../config/colors.dart';
 import '../../../../core/classes/app.dart';
 import '../../../../core/models/player.dart';
+import '../../../../data/questions/questions.dart';
 
 class QuestionWidget extends StatefulWidget {
   QuestionWidget(
@@ -30,28 +31,6 @@ class QuestionWidget extends StatefulWidget {
 class _QuestionWidgetState extends State<QuestionWidget> {
   final TextEditingController controller = TextEditingController();
 
-  late var listen;
-  @override
-  void initState() {
-    var doc = App.database
-        .collection('game')
-        .doc(Game.roomId);
-    listen = doc
-        .snapshots()
-        .listen((event) async {
-      Game.players.clear();
-      for (var map in event.data()!["players"]) {
-        Game.players.add(Player.fromMap(map));
-      }
-      if (Game.players.every((element) => element.isReady == true)){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => AnswerPage()));
-        OverlayLoadingController.remove(context);
-        listen.cancel();
-      }
-    });
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -63,7 +42,9 @@ class _QuestionWidgetState extends State<QuestionWidget> {
             textAlign: TextAlign.center,
             style: AppTextTheme.headline.copyWith(fontSize: 20),
           ),
-          SizedBox(height: 50,),
+          SizedBox(
+            height: 50,
+          ),
           Stack(
             alignment: Alignment.bottomCenter,
             children: [
@@ -77,10 +58,12 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                   maxLines: null,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.brown, width: 4),
+                        borderSide:
+                            BorderSide(color: AppColors.brown, width: 4),
                         borderRadius: BorderRadius.circular(15)),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.brown, width: 4),
+                        borderSide:
+                            BorderSide(color: AppColors.brown, width: 4),
                         borderRadius: BorderRadius.circular(15)),
                     /*border: OutlineInputBorder(
                             borderSide: BorderSide(color: AppColors.brown, width: 3),
@@ -88,7 +71,6 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                   ),
                 ),
               ),
-
               Container(
                 //width: 400,
                 height: 50,
@@ -105,35 +87,31 @@ class _QuestionWidgetState extends State<QuestionWidget> {
               )
             ],
           ),
-          SizedBox(height: 50,),
-
+          SizedBox(
+            height: 50,
+          ),
           Button(
               onPressed: () {
-                var doc = App.database
-                  .collection('game')
-                  .doc(Game.roomId);
-
+                var doc = App.database.collection('game').doc(Game.roomId);
 
                 var words = GameplayFunc.separateAnswer(controller.text.trim());
                 words.shuffle();
                 doc.update({"answerWords": FieldValue.arrayUnion(words)});
-                if(widget.currentPage != 2)
-                  {
-                    widget.pageController.nextPage(
-                        duration: Duration(milliseconds: 500), curve: Curves.linear);
+                if (widget.currentPage != 2) {
+                  widget.pageController.nextPage(
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.linear);
+                } else if (widget.currentPage == 2) {
+                  var me = Game.players.firstWhere(
+                      (element) => element.nickname == Game.myNickname);
+                  me.isReady = true;
+                  var temp = [];
+                  for (var player in Game.players) {
+                    temp.add(player.toMap());
                   }
-                else if (widget.currentPage == 2)
-                  {
-
-                   var me = Game.players.firstWhere((element) => element.nickname == Game.myNickname);
-                   me.isReady = true;
-                   var temp = [];
-                   for (var player in Game.players) {
-                     temp.add(player.toMap());
-                   }
-                   doc.update({"players": temp});
-                   OverlayLoadingController.show(context);
-                  }
+                  doc.update({"players": temp});
+                  OverlayLoadingController.show(context);
+                }
               },
               child: Text(
                 "Продолжить",

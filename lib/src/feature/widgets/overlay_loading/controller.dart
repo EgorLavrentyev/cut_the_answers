@@ -11,8 +11,7 @@ class OverlayLoadingController {
   static void _insertOverlay(BuildContext context) async {
     _overlayState = Overlay.of(context);
     overlay = OverlayEntry(
-        opaque: false,
-        builder: (context) => const OverlayLoadingWidget());
+        opaque: false, builder: (context) => const OverlayLoadingWidget());
   }
 
   static void _removeOverlay() {
@@ -27,8 +26,11 @@ class OverlayLoadingController {
   }
 
   static void remove(BuildContext context) async {
-    controller!.reverse();
-    await Future.delayed(
-        Duration(milliseconds: 300), () => _removeOverlay());
+    if (controller != null) {
+      controller!.reverse();
+      await Future.delayed(Duration(milliseconds: 300), () => _removeOverlay());
+    } else {
+      _removeOverlay();
+    }
   }
 }
