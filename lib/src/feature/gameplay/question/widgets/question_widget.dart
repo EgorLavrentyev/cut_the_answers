@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:job_job_game/src/config/theme.dart';
 import 'package:job_job_game/src/core/classes/game.dart';
+import 'package:job_job_game/src/core/func/data_func.dart';
 import 'package:job_job_game/src/core/func/gameplay_func.dart';
 import 'package:job_job_game/src/feature/gameplay/answer/answer_page.dart';
 import 'package:job_job_game/src/feature/widgets/button.dart';
@@ -102,14 +103,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                       duration: Duration(milliseconds: 500),
                       curve: Curves.linear);
                 } else if (widget.currentPage == 2) {
-                  var me = Game.players.firstWhere(
-                      (element) => element.nickname == Game.myNickname);
-                  me.isReady = true;
-                  var temp = [];
-                  for (var player in Game.players) {
-                    temp.add(player.toMap());
-                  }
-                  doc.update({"players": temp});
+                  DataFunc.setMeReady(true);
                   OverlayLoadingController.show(context);
                 }
               },

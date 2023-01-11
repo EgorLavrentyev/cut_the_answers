@@ -3,6 +3,7 @@ import 'package:job_job_game/src/core/classes/game.dart';
 import 'package:job_job_game/src/feature/gameplay/question/widgets/question_widget.dart';
 
 import '../../../core/classes/app.dart';
+import '../../../core/func/data_func.dart';
 import '../../../core/models/player.dart';
 import '../../../data/questions/questions.dart';
 import '../../widgets/overlay_loading/controller.dart';
@@ -41,8 +42,8 @@ class _QuestionPageState extends State<QuestionPage> {
 
         List<dynamic> availableWords = event.data()!["answerWords"];
         availableWords.shuffle();
-
-        Navigator.push(
+        print(Game.players.toString());
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => AnswerPage(

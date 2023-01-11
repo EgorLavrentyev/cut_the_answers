@@ -35,6 +35,7 @@ class JoinFunc {
           "nickname": nickname,
           "score": 0,
           "isReady": false,
+          "answers": {},
         }
       ],
       "questions": [],
@@ -66,6 +67,7 @@ class JoinFunc {
             "nickname": nickname,
             "score": 0,
             "isReady": false,
+            "answers": {},
           }
         ],
         "questions": [],

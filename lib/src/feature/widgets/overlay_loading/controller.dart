@@ -17,6 +17,7 @@ class OverlayLoadingController {
   static void _removeOverlay() {
     if (overlay != null) {
       overlay!.remove();
+      overlay = null;
     }
   }
 

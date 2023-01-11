@@ -2,11 +2,13 @@ class Player {
   String nickname;
   int score;
   bool isReady;
+  Map<String, dynamic> answers;
 
   Player({
     required this.nickname,
     this.score = 0,
     required this.isReady,
+    required this.answers,
   });
 
   Map<String, dynamic> toMap() {
@@ -14,6 +16,7 @@ class Player {
       'nickname': nickname,
       'score': score,
       "isReady": isReady,
+      "answers": answers,
     };
   }
 
@@ -22,6 +25,7 @@ class Player {
       nickname: map['nickname'],
       score: map['score'],
       isReady: map['isReady'],
+      answers: map['answers'],
     );
   }
 
