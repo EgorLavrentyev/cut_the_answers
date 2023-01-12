@@ -22,8 +22,9 @@ class _VoteWidgetState extends State<VoteWidget> {
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
-      onTap: !isTapped ? () {
+      onTap: !isTapped || Game.myNickname == widget.nickname ? () {
         var doc = App.database.collection('game').doc(Game.roomId);
        var player = Game.players.firstWhere((element) => element.nickname == widget.nickname);
        player.score++;
@@ -37,7 +38,7 @@ class _VoteWidgetState extends State<VoteWidget> {
         });
       } : null,
       child: Opacity(
-        opacity: isTapped ? 0.3 : 1,
+        opacity: isTapped || Game.myNickname == widget.nickname ? 0.3 : 1,
         child: Container(
             decoration: BoxDecoration(
                 border: const Border.fromBorderSide(
