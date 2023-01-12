@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:job_job_game/src/config/colors.dart';
+import 'package:job_job_game/src/feature/gameplay/result/result_page.dart';
 import 'package:job_job_game/src/feature/gameplay/vote/widgets/vote_widget.dart';
 
 import '../../../core/classes/app.dart';
@@ -54,10 +55,12 @@ class _VotePageState extends State<VotePage> {
       }
       if (Game.players.every((element) => element.isReady == true)) {
 
+        Game.players.sort((a, b) => b.score.compareTo(a.score));
+
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => Container()));
+                builder: (context) => ResultPage()));
         OverlayLoadingController.remove(context);
         listen.cancel();
       }

@@ -96,7 +96,6 @@ class _LobbyPageState extends State<LobbyPage> {
                       return Container(
                         padding: EdgeInsets.only(left: 5),
                         child: RichText(
-                            softWrap:false,
                             textAlign: TextAlign.start,
                             text: TextSpan(
                                 style: const TextStyle(
