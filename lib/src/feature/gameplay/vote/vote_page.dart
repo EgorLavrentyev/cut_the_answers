@@ -44,6 +44,7 @@ class _VotePageState extends State<VotePage> {
 
   @override
   void initState() {
+    DataFunc.setAllReady(false);
     _convertAnswers();
     var doc = App.database.collection('game').doc(Game.roomId);
     listen = doc.snapshots().listen((event) async {

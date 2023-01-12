@@ -69,65 +69,73 @@ class _LobbyPageState extends State<LobbyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "Ваш код \nкомнаты",
-            style: AppTextTheme.headline,
-            textAlign: TextAlign.center,
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Ваш код \nкомнаты",
+                style: AppTextTheme.headline,
+                textAlign: TextAlign.center,
+              ),
+              Text(
+                widget.roomId,
+                style: AppTextTheme.headline.copyWith(color: AppColors.brown),
+                textAlign: TextAlign.center,
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 10),
+                height: MediaQuery.of(context).size.height * 0.6,
+                child: ListView.builder(
+                    // gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    //     mainAxisExtent: 90, maxCrossAxisExtent: 200),
+                    itemCount: Game.players.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        padding: EdgeInsets.only(left: 5),
+                        child: RichText(
+                            softWrap:false,
+                            textAlign: TextAlign.start,
+                            text: TextSpan(
+                                style: const TextStyle(
+                                    fontSize: 30, fontWeight: FontWeight.bold),
+                                children: [
+                                  TextSpan(
+                                      text: "${index + 1}. ",
+                                      style: const TextStyle(color: Colors.black)),
+                                  TextSpan(
+                                      text: Game.players[index].nickname,
+                                      style: const TextStyle(color: Colors.brown))
+                                ])),
+                      );
+                    }),
+              ),
+              Button(
+                  onPressed: () async {
+                    if (Game.players.length >= 2) {
+                      final doc =
+                          App.database.collection('game').doc(widget.roomId);
+                      final snapshot = await doc.get();
+                      doc.set({
+                        "roomId": widget.roomId,
+                        "players": snapshot.data()!["players"],
+                        "start": true,
+                        "questions": [],
+                        "answerWords": [],
+                      });
+                    } else {
+                      Ui.showSnack(context, "Играть одному не интересно!");
+                    }
+                  },
+                  child: Text(
+                    "Начать",
+                    style: AppTextTheme.button,
+                  ))
+            ],
           ),
-          Text(
-            widget.roomId,
-            style: AppTextTheme.headline.copyWith(color: AppColors.brown),
-            textAlign: TextAlign.center,
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 10),
-            height: MediaQuery.of(context).size.height * 0.6,
-            child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    mainAxisExtent: 90, maxCrossAxisExtent: 200),
-                itemCount: Game.players.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                          style: const TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.bold),
-                          children: [
-                            TextSpan(
-                                text: "${index + 1}. ",
-                                style: const TextStyle(color: Colors.black)),
-                            TextSpan(
-                                text: Game.players[index].nickname,
-                                style: const TextStyle(color: Colors.brown))
-                          ]));
-                }),
-          ),
-          Button(
-              onPressed: () async {
-                if (Game.players.length >= 2) {
-                  final doc =
-                      App.database.collection('game').doc(widget.roomId);
-                  final snapshot = await doc.get();
-                  doc.set({
-                    "roomId": widget.roomId,
-                    "players": snapshot.data()!["players"],
-                    "start": true,
-                    "questions": [],
-                    "answerWords": [],
-                  });
-                } else {
-                  Ui.showSnack(context, "Играть одному не интересно!");
-                }
-              },
-              child: Text(
-                "Начать",
-                style: AppTextTheme.button,
-              ))
-        ],
+        ),
       ),
     );
   }
