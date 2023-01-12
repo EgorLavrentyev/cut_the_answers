@@ -4,6 +4,7 @@ import 'package:job_job_game/src/config/theme.dart';
 import 'package:job_job_game/src/core/classes/app.dart';
 import 'package:job_job_game/src/feature/gameplay/answer/answer_page.dart';
 import 'package:job_job_game/src/feature/gameplay/question/question_page.dart';
+import 'package:job_job_game/src/feature/gameplay/vote/vote_page.dart';
 import 'package:job_job_game/src/feature/join/join_page.dart';
 import 'package:job_job_game/src/feature/main_menu/main_menu_page.dart';
 
@@ -20,12 +21,12 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: AppTheme.theme,
-        home: MainMenuPage() //MainMenuPage(),
-        );
+         home: MainMenuPage());
   }
 }

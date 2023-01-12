@@ -38,9 +38,9 @@ class _AnswerPageState extends State<AnswerPage> {
       }
       if (Game.players.every((element) => element.isReady == true)) {
         print("ALL IS READY");
-        var answers = {};
+        List<Map<String, dynamic>> answers = [];
         for (int i = 0; i < Game.players.length; i++) {
-          answers.addAll({
+          answers.add({
             event.data()!["players"][i]["nickname"]: event.data()!["players"][i]
                 ["answers"]
           });
@@ -48,11 +48,11 @@ class _AnswerPageState extends State<AnswerPage> {
         print(answers);
         OverlayLoadingController.remove(context);
         listen.cancel();
-        // Navigator.pushReplacement(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => VotePage(
-        //             firstAnswer: firstAnswer, secondAnswer: secondAnswer)));
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => VotePage(
+                    answers: answers,)));
       }
     });
     super.initState();
