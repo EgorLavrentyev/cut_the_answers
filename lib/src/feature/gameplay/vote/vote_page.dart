@@ -1,29 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:job_job_game/src/feature/gameplay/vote/widgets/vote_widget.dart';
 
-class VotePage extends StatefulWidget {
-  const VotePage(
-      {Key? key, required this.firstAnswer, required this.secondAnswer})
-      : super(key: key);
+class VotePage extends StatelessWidget {
+  const VotePage({Key? key, required this.answers}) : super(key: key);
 
-  final Map<String, dynamic> firstAnswer;
-  final Map<String, dynamic> secondAnswer;
+  final List<Map<String, dynamic>> answers;
 
-  @override
-  State<VotePage> createState() => _VotePageState();
-}
 
-class _VotePageState extends State<VotePage> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            children: [Container()],
-          )
-        ],
-      ),
-    );
+        body: SafeArea(
+            child: GridView.builder(
+              itemCount: answers.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, mainAxisSpacing: 5, crossAxisSpacing: 5),
+                itemBuilder: (context, index){
+                  return VoteWidget();
+                })));
   }
-}
+
