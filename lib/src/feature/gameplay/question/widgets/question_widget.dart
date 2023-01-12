@@ -11,6 +11,7 @@ import 'package:job_job_game/src/feature/widgets/overlay_loading/controller.dart
 import '../../../../config/colors.dart';
 import '../../../../core/classes/app.dart';
 import '../../../../core/models/player.dart';
+import '../../../../core/services/ui.dart';
 import '../../../../data/questions/questions.dart';
 
 class QuestionWidget extends StatefulWidget {
@@ -96,6 +97,10 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                 var doc = App.database.collection('game').doc(Game.roomId);
 
                 var words = GameplayFunc.separateAnswer(controller.text.trim());
+                if (words.length < 7)
+                  {
+                    Ui.showSnack(context, "Введите не менее 7-ми слов");
+                  }
                 words.shuffle();
                 doc.update({"answerWords": FieldValue.arrayUnion(words)});
                 if (widget.currentPage != 2) {
